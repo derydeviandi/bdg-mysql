@@ -103,6 +103,17 @@ router.post('/users/login', (req, res) => {
     })
 })
 
+// VERIFICATION
+router.get('/verification/:username', (req, res) => {
+    let sql = `UPDATE users SET verified = true WHERE username  = '${req.params.username}'`
+
+    conn.query(sql, (err, result) => {
+        if (err) return res.send(err)
+
+        res.send("Verifikasi berhasil")
+    })
+})
+
 // READ PROFILE
 
 
