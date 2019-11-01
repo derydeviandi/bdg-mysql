@@ -20,8 +20,18 @@ let mail = {
     html: `<h1>Hello Lads</h1>`
 }
 
-transporter.sendMail(mail, (err, result) => {
-    if (err) return console.log(err)
 
-    console.log('Email berhasil dikirim')
-})
+
+let sendVerification = (data) => {
+    let mal = {
+        from: 'Dery Dev <derydeviandi@SpeechGrammarList.com>',
+        to: email,
+        subject: 'Selamat Datang',
+        html: `<h1>hello, ${data.name}</h1>`
+    }
+    transporter.sendMail(mail, (err, result) => {
+        if (err) return console.log(err)
+
+        console.log('Email berhasil dikirim')
+    })
+}
