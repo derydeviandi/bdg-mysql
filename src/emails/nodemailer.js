@@ -25,9 +25,10 @@ let mail = {
 let sendVerification = (data) => {
     let mal = {
         from: 'Dery Dev <derydeviandi@SpeechGrammarList.com>',
-        to: email,
+        to: data.email,
         subject: 'Selamat Datang',
-        html: `<h1>hello, ${data.name}</h1>`
+        html: `<h1>hello, ${data.name}</h1>
+        <a href ='http://localhost:2019/verification/${data.username}'>Klik untuk verivikasi</a>`
     }
     transporter.sendMail(mail, (err, result) => {
         if (err) return console.log(err)
@@ -35,3 +36,5 @@ let sendVerification = (data) => {
         console.log('Email berhasil dikirim')
     })
 }
+
+module.exports = sendVerification

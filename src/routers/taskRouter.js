@@ -66,6 +66,16 @@ router.patch('/tasks/:tasksid', (req, res) => {
 })
 
 // DELETE TASK
+router.delete('/tasks/:taskid', (req, res) => {
+    let sql = `DELETE FROM tasks WHERE id = '${req.params.taskid}'`
+
+    conn.query(sql, data, (err, result) => {
+        if (err) return res.send(err)
+
+        res.send(result)
+    })
+})
+
 
 
 module.exports = router
