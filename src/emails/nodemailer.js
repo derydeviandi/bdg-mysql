@@ -13,17 +13,8 @@ let transporter = nodemailer.createTransport({
     }
 })
 
-let mail = {
-    from: 'Dery Dev <derydeviandi@gmail.com>',
-    to: 'derydeviandi@gmail.com',
-    subject: 'Selamat Datang',
-    html: `<h1>Hello Lads</h1>`
-}
-
-
-
 let sendVerification = (data) => {
-    let mal = {
+    let mail = {
         from: 'Dery Dev <derydeviandi@SpeechGrammarList.com>',
         to: data.email,
         subject: 'Selamat Datang',
