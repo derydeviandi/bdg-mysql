@@ -193,13 +193,14 @@ router.post('/users', (req, res) => {
 router.patch('/users/:username', upload.single('avatar'), (req, res) => {
     let sql = `UPDATE users SET ? WHERE username = ?`
     let data = [req.body, req.params.username]
+    // req.body {name, email}
+    // req.file = undefined / {filename, ...}
 
-    // Jika user tidak mengirimkan password / tidak mengganti password
-    // Hapus property password dari req.body
-    if (data[0].password == '') {
-        delete data[0].password
-    }
+    // jika user upload avatar, nama file akan disimpan dikolom 'avatar'
+    if (req.file) data[0].avatar = req.file.filename
+    // req.body {name, email, avatar}
 
+    // jika user mengirim password, password akan dihash untuk kemudian disimpan
     if (data[0].password) {
         data[0].password = bcryptjs.hashSync(data[0].password, 8);
     }
@@ -207,7 +208,7 @@ router.patch('/users/:username', upload.single('avatar'), (req, res) => {
     conn.query(sql, data, (err, result) => {
         if (err) return res.end(err)
 
-        res.send(result)
+        res.send(req.file)
     })
 })
 
