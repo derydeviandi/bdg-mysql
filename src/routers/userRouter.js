@@ -190,9 +190,15 @@ router.post('/users', (req, res) => {
 })
 
 // UPDATE USER
-router.patch('/users/:userid', (req, res) => {
-    let sql = `UPDATE users SET ? WHERE id = ?`
-    let data = [req.body, req.params.userid]
+router.patch('/users/:username', upload.single('avatar'), (req, res) => {
+    let sql = `UPDATE users SET ? WHERE username = ?`
+    let data = [req.body, req.params.username]
+
+    // Jika user tidak mengirimkan password / tidak mengganti password
+    // Hapus property password dari req.body
+    if (data[0].password == '') {
+        delete data[0].password
+    }
 
     if (data[0].password) {
         data[0].password = bcryptjs.hashSync(data[0].password, 8);

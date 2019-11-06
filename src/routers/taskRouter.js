@@ -40,7 +40,7 @@ router.get('/tasks/:taskid', (req, res) => {
 router.post('/tasks', (req, res) => {
 
     let sql = `INSERT INTO tasks SET ?`
-    let data = req.body
+    let data = req.body // {description, user_id}
     let sql2 = `SELECT * FROM tasks`
 
     conn.query(sql, data, (err, result) => {
@@ -58,6 +58,7 @@ router.post('/tasks', (req, res) => {
 router.patch('/tasks/:taskid', (req, res) => {
     let sql = `UPDATE tasks SET ? WHERE id = ?`
     let data = [req.body, req.params.taskid]
+    // req.body = {completed: true}
 
     conn.query(sql, data, (err, result) => {
         if (err) return res.send(err)
@@ -83,12 +84,9 @@ module.exports = router
 /*
     Untuk SQL yang menggunakan tanda tanya (?), maka pada conn.query akan menerima 3 parameter
     yaitu : sql, data, (err, result) => {}
-
     Jika tanda tanya yang digunaka lebih dari satu, variabel data akan berisi array of data,
     urutan data pada array harus sama dengan urutan tanda tanya pada SQL
 */
-
-
 
 
 
