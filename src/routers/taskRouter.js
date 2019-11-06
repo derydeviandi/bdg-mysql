@@ -1,3 +1,4 @@
+// Hasil konfigurasi yang ada di file index.js pada folder connection
 const conn = require('../connection/index')
 const router = require('express').Router()
 
@@ -26,7 +27,7 @@ router.get('/owntasks/:userid', (req, res) => {
 
 // GET TASK BY ID
 router.get('/tasks/:taskid', (req, res) => {
-    let sql = `SELECT * FROM tasks Where task_id ='${req.params.taskid}'`
+    let sql = `SELECT * FROM tasks WHERE id = '${req.params.taskid}'`
 
     conn.query(sql, (err, result) => {
         if (err) return res.send(err)
@@ -54,7 +55,7 @@ router.post('/tasks', (req, res) => {
 })
 
 // UPDATE TASK
-router.patch('/tasks/:tasksid', (req, res) => {
+router.patch('/tasks/:taskid', (req, res) => {
     let sql = `UPDATE tasks SET ? WHERE id = ?`
     let data = [req.body, req.params.taskid]
 
@@ -77,13 +78,17 @@ router.delete('/tasks/:taskid', (req, res) => {
 })
 
 
-
 module.exports = router
 
 /*
-    Untuk sql yg menggunakan tanda tanya (?), maka pada conn.query akan menerima 3 parameter
+    Untuk SQL yang menggunakan tanda tanya (?), maka pada conn.query akan menerima 3 parameter
     yaitu : sql, data, (err, result) => {}
 
-    Jika tanda tanya yg digunakan lebih dari satu, variabel data akan berisi array of data
-    urutan data pada arry harus sama dengan urutan tanda tanya pada sql
+    Jika tanda tanya yang digunaka lebih dari satu, variabel data akan berisi array of data,
+    urutan data pada array harus sama dengan urutan tanda tanya pada SQL
 */
+
+
+
+
+
