@@ -19,7 +19,7 @@ let sendVerification = (data) => {
         to: data.email,
         subject: 'Selamat Datang',
         html: `<h1>hello, ${data.name}</h1>
-        <a href ='http://localhost:2019/verification/${data.username}'>Klik untuk verivikasi</a>`
+        <a href ='https://bdg-frontend-mysql.herokuapp.com/verification/${data.username}'>Klik untuk verivikasi</a>`
     }
     transporter.sendMail(mail, (err, result) => {
         if (err) return console.log(err)
