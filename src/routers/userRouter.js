@@ -28,7 +28,9 @@ const _storage = multer.diskStorage({
     },
     // Menentukan pola nama file
     filename: function (req, file, cb) {
-        cb(null, req.params.username + '-' + file.fieldname + path.extname(file.originalname))
+        // Menggunakan Date agar namanya akan selalu berubah / berbeda dari sebelumnya
+        // Karena jika sama gambar tidak akan langsung ganti pada halaman profile (cache)
+        cb(null, Date.now() + req.params.username + file.fieldname + path.extname(file.originalname))
     }
 })
 
@@ -191,25 +193,44 @@ router.post('/users', (req, res) => {
 
 // UPDATE USER
 router.patch('/users/:username', upload.single('avatar'), (req, res) => {
-    let sql = `UPDATE users SET ? WHERE username = ?`
+    let sql = `SELECT avatar FROM users WHERE username = '${req.params.username}'`
+    let sql2 = `UPDATE users SET ? WHERE username = ?`
     let data = [req.body, req.params.username]
-    // req.body {name, email}
-    // req.file = undefined / {filename, ...}
+    // req.body {name, email} / {name, email, password}
+    // req.file = undefined / {filenaame, ...}
 
-    // jika user upload avatar, nama file akan disimpan dikolom 'avatar'
+    // Jika user upload avatar, nama file akan disimpan di kolom 'avatar
     if (req.file) data[0].avatar = req.file.filename
-    // req.body {name, email, avatar}
 
-    // jika user mengirim password, password akan dihash untuk kemudian disimpan
+    // Jika user mengirim password, password akan di hash untuk kemudian disimpan
     if (data[0].password) {
         data[0].password = bcryptjs.hashSync(data[0].password, 8);
     }
 
-    conn.query(sql, data, (err, result) => {
-        if (err) return res.end(err)
+    // Setiap kali mengupload avatar baru, kita akan hapus avatar yang lama 
 
-        res.send(req.file)
+    // Hapus avatar yang lama
+    conn.query(sql, (err, result) => {
+        if (err) return res.send({ error: err.message })
+
+        if (result[0].avatar) {
+            let avatarName = result[0].avatar
+            // imgPath = C:\Users\rochafi\Desktop\bdg-mysql\public\uploads\nama-avatar-old.jpg
+            let imgPath = `${uploadDirectory}${avatarName}`
+            // Menghapus file avatar yang lama
+            fs.unlinkSync(imgPath)
+        }
+
+        // Simpan nama avatar yang baru di upload
+        conn.query(sql2, data, (err, result) => {
+            if (err) return res.send(err.message)
+
+            res.send(req.file)
+
+        })
     })
+
+
 })
 
 // DELETE USER
