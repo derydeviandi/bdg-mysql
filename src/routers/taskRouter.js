@@ -71,7 +71,7 @@ router.patch('/tasks/:taskid', (req, res) => {
 router.delete('/tasks/:taskid', (req, res) => {
     let sql = `DELETE FROM tasks WHERE id = '${req.params.taskid}'`
 
-    conn.query(sql, data, (err, result) => {
+    conn.query(sql, (err, result) => {
         if (err) return res.send(err)
 
         res.send(result)
